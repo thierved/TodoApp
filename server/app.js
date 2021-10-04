@@ -1,27 +1,29 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const mongoose = require('./models/db');
 
-mongoose.connect("mongodb://localhost/TodoApp");
+const { Todo } = require('./models/todo');
+const { User } = require('./models/user');
 
-const todo = mongoose.Schema({
-    text: {
-        type: String,
-        minlength: 3,
-        required: true
-    },
-    completed: Boolean,
-    completedAt: {
-        type: Date,
-        default: Date.now
-    }
+const app = express();
+
+app.use(express.json());
+
+app.post('/users', (req, res) => {
+    const user = new User({
+        name: req.body.name
+    });
+
+    user.save().then(user => res.send(user))
+        .catch(err => res.send(err))
 });
 
-const Todo = mongoose.model("Todo", todo);
+app.post('/todos', (req, res) => {
+    const todo = new Todo({
+        text: req.body.text
+    });
 
-const newTodo = new Todo({
-    text: "Water the garden",
-    completed: true
+    todo.save().then(todo => res.send(todo))
+        .catch(err => res.send(err))
 });
 
-newTodo.save()
-    .then(doc => console.log(doc))
-    .catch(err => console.log(err));
+app.listen(3000, () => console.log("listening on port 3000!"));
