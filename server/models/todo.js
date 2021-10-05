@@ -10,7 +10,7 @@ const todo = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    completedAt: {
+    createdDate: {
         type: Date,
         default: Date.now
     }
