@@ -1,14 +1,20 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import axios from 'axios';
 
 const Application = () => {
     const [data, setData] = useState([]);
-    fetch("http://localhost:3000/todos")
-        .then(d => d.json())
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/todos")
         .then(d => setData(d))
         .catch(err => console.log(err));
+        console.log(data)
+    }, [data]);
+    
     return (
         <div>
             hello !
+            
         </div>
     );
 }
