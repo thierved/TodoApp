@@ -1,37 +1,18 @@
-const express = require('express');
-const mongoose = require('./models/db');
+import bodyParser from 'body-parser';
+import express from 'express';
+import cors from 'cors';
 
-const { Todo } = require('./models/todo');
-const { User } = require('./models/user');
+import mongoose from './models/db.js';
+import todosRouter from './routes/todos.js';
+import usersRouter from './routes/users.js';
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
-app.get('/todos', (req, res) => {
-    Todo.find()
-        .then(todo => res.send(todo))
-        .catch(err => res.status(400).send(err));
-});
+app.use('/todos', todosRouter);
+app.use('/users', usersRouter);
 
-app.post('/users', (req, res) => {
-    const user = new User({
-        name: req.body.name
-    });
 
-    user.save()
-        .then(user => res.send(user))
-        .catch(err => res.send(err))
-});
-
-app.post('/todos', (req, res) => {
-    const todo = new Todo({
-        text: req.body.text
-    });
-
-    todo.save()
-        .then(todo => res.send(todo))
-        .catch(err => res.send(err))
-});
-
-app.listen(3000, () => console.log("listening on port 3000!"));
+app.listen(8080, () => console.log("listening on port 3000!"));
